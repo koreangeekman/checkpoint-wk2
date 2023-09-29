@@ -20,6 +20,10 @@ p {
   color: whitesmoke;
 }
 
+.upgradeMenu {
+  font-size: 1rem;
+}
+
 .screen {
   width: 635px;
   height: 450px;
@@ -47,4 +51,14 @@ p {
   height: 200px;
   width: 200px;
   border-radius: 100px;
+}
+
+@media (max-width:500px) {
+  .screen {
+    width: 460px;
+  }
+
+  .padMe {
+    display: none;
+  }
 }

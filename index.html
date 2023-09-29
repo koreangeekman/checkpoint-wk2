@@ -70,13 +70,19 @@
   <main class="container-fluid">
     <div class="row justify-content-around">
 
-      <div class="col-12 my-5 pb-4"></div>
+      <!-- top padding -->
+      <div class="col-12 my-5 pb-4 padMe"></div>
 
-      <!-- SECTION MOAR STATS? -->
-      <div class="col-2"></div>
-      <!-- !SECTION MOAR STATS? -->
+      <!-- SECTION SHOP MENU -->
+      <div class="col-12 col-md-2 order-3 order-md-1 p-2">
+        <div class="upgradeMenu" id="buyMenu">
+          <!-- menu gets drawn by JS -->
+        </div>
+      </div>
+      <!-- !SECTION SHOP MENU -->
+
       <!-- SECTION STATS PAGE -->
-      <div class="col-12 col-md-6 screen mb-4">
+      <div class="col-12 col-md-6 screen mb-4 order-2 order-md-2">
         <div class="rounded bg-dark text-light justify-content-center px-2">
           <span class="text-center m-0 p-0">
             <p class="m-0 p-0">------------------------------------------------</p>
@@ -111,20 +117,20 @@
       <!-- !SECTION STATS PAGE -->
 
       <!-- SECTION MOUSE IMG -->
-      <div class="col-2 d-flex ">
+      <div class="col-12 col-md-2 order-1 order-md-3">
         <img class="m-0 p-0 " onclick="interrupt()" src="./imgs/mouse.png" alt="vintage computer mouse">
       </div>
       <!-- !SECTION MOUSE IMG -->
 
       <!-- SECTION EVEN MOAR STATS -->
-      <div class="col-12 pt-3 d-flex grandTotal">
+      <div class="col-12 pt-3 d-flex grandTotal order-4">
         <span class="blueBG d-flex w-100 p-2 rounded justify-content-between">
           <p class="px-3">Total Interrupts Sent: </p>
           <p class="px-3" id="grandTotal">0</p>
         </span>
       </div>
       <!-- !SECTION EVEN MOAR STATS -->
-      <div class="col-12 p-3 mouseWheel">
+      <div class="col-12 p-3 mouseWheel order-5">
         <img class="img-fluid d-none" id="mouseWheel" src="https://i.giphy.com/media/APaikN0tFL86BDUDgq/giphy.webp"
           alt="animated mouse in a wheel">
       </div>
