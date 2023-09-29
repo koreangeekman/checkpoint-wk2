@@ -1,6 +1,12 @@
 body {
   background-color: #123456b0;
   font-family: 'Courier Prime', monospace;
+  font-size: 20px;
+  user-select: none;
+}
+
+p {
+  margin: 0;
 }
 
 .BGimg {
@@ -9,7 +15,36 @@ body {
   object-fit: scale-down;
 }
 
+.blueBG {
+  background-color: #123456b0;
+  color: whitesmoke;
+}
+
+.screen {
+  width: 635px;
+  height: 450px;
+  margin-top: -16px;
+}
+
 .title {
   font-family: 'Pixelify Sans', cursive;
   font-size: 72px;
+  margin: -15px 0;
+}
+
+.dashed {
+  margin: -14px 0;
+  padding: 0;
+  text-align: center;
+}
+
+.grandTotal {
+  width: 670px;
+  height: 60px;
+}
+
+.mouseWheel img {
+  height: 200px;
+  width: 200px;
+  border-radius: 100px;
 }

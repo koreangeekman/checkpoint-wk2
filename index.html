@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>CLICKITY CLICK</title>
+  <title>IRQ OVERLOArD</title>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -36,11 +36,26 @@
 
   need to start simple with just checkpoint requirements first.. but final build will be too different.. consider as a personal project
 
+
   -- alternate theme for the sake of just the checkpoint?
   mouse clicker.. clicking the digital mouse with a mouse
   image options: classic ball mouse, touchpad, apple mouse, other varieties
   auto upgrade: add real mouse in a running wheel with a tab that clicks a mouse button per rotation
   stack USB hubs with cables for additional mice (up to 127 mice total?)
+
+  resource = # of interrupts sent, upgrades to processor/system for max number of overall events to handle after barriers
+  limits of an 8080? 8086? amiga? 386? 686? original intel pentium? original AMD?
+  -- turbo option??? (trick option, slows down the clock speeds, reducing performance to become backwards compatible with prior upgrades/autos??)
+
+  IRQ - Interrupt Request Queue
+  IRQ max, IRQ current load/# interrupts sent, upgrade max
+  
+  Every action from a mouse/keyboard can trigger..
+  -start with just left clicks
+  --upgrade to include right clicks
+  --addtl upgrades: scroll wheel, extra buttons on mice
+  ---ultra upgrade to include mouse movements
+
 
   -- convert to keyboard apm tracker? or another alternative theme?
   include any and all keystrokes as a conditional
@@ -53,33 +68,66 @@
 
 <body class="BGimg debug">
   <main class="container-fluid">
-    <div class="row justify-content-center">
-      <div class="col-12 my-5 pb-4"></div>
-      <div class="col-5 m-0 p-0 text-center title">
-        <p class="m-0 p-0 bg-dark text-light">CLICKITY CLICK</p>
-      </div>
-
-    </div>
     <div class="row justify-content-around">
 
+      <div class="col-12 my-5 pb-4"></div>
 
-      <!-- filler col -->
       <!-- SECTION MOAR STATS? -->
       <div class="col-2"></div>
       <!-- !SECTION MOAR STATS? -->
-
       <!-- SECTION STATS PAGE -->
-      <div class="col-5 bg-dark text-light justify-content-center">
-
-
+      <div class="col-12 col-md-6 screen mb-4">
+        <div class="rounded bg-dark text-light justify-content-center px-2">
+          <span class="text-center m-0 p-0">
+            <p class="m-0 p-0">------------------------------------------------</p>
+            <p class="bg-dark text-light title">IRQ OVERLOArD</p>
+            <p class="dashed">------------------------------------------------</p>
+          </span>
+          <span class="d-flex justify-content-between"> <!-- LINE 1 -->
+            <p class="m-0 p-0">| Interrupts Queued: </p>
+            <p class="m-0 p-0">1234567890 |</p>
+          </span>
+          <p class="dashed"> ------------------------------------------------ </p>
+          <span class="d-flex justify-content-between"> <!-- LINE 2 -->
+            <p class="m-0 p-0">| Interrupts Processed: </p>
+            <p class="m-0 p-0">123456 |</p>
+          </span>
+          <p class="dashed"> ------------------------------------------------ </p>
+          <span class="d-flex justify-content-between"> <!-- LINE 3 -->
+            <p class="m-0 p-0">| Interrupts generated per click: </p>
+            <p class="m-0 p-0">1234567890 |</p>
+          </span>
+          <p class="dashed"> ------------------------------------------------ </p>
+          <p class="m-0 p-0">| 123456789012345678901234567890123456789012345 |</p> <!-- LINE 4 -->
+          <p class="m-0 p-0">| 123456789012345678901234567890123456789012345 |</p> <!-- LINE 5 -->
+          <p class="m-0 p-0">| 123456789012345678901234567890123456789012345 |</p> <!-- LINE 6 -->
+          <p class="m-0 p-0">| 123456789012345678901234567890123456789012345 |</p> <!-- LINE 7 -->
+          <p class="m-0 p-0">| 123456789012345678901234567890123456789012345 |</p> <!-- LINE 8 -->
+          <p class="m-0 p-0">| 123456789012345678901234567890123456789012345 |</p> <!-- LINE 9 -->
+          <p class="m-0 p-0">| 123456789012345678901234567890123456789012345 |</p> <!-- LINE 10 -->
+          <p class="dashed"> ------------------------------------------------ </p>
+        </div>
       </div>
       <!-- !SECTION STATS PAGE -->
 
       <!-- SECTION MOUSE IMG -->
       <div class="col-2 d-flex ">
-        <img class="" src="./imgs/mouse.png" alt="vintage computer mouse">
+        <img class="m-0 p-0 " onclick="interrupt()" src="./imgs/mouse.png" alt="vintage computer mouse">
       </div>
       <!-- !SECTION MOUSE IMG -->
+
+      <!-- SECTION EVEN MOAR STATS -->
+      <div class="col-12 pt-3 d-flex grandTotal">
+        <span class="blueBG d-flex w-100 p-2 rounded justify-content-between">
+          <p class="px-3">Total Interrupts Sent: </p>
+          <p class="px-3" id="grandTotal">0</p>
+        </span>
+      </div>
+      <!-- !SECTION EVEN MOAR STATS -->
+      <div class="col-12 p-3 mouseWheel">
+        <img class="img-fluid d-none" id="mouseWheel" src="https://i.giphy.com/media/APaikN0tFL86BDUDgq/giphy.webp"
+          alt="animated mouse in a wheel">
+      </div>
     </div>
   </main>
 
