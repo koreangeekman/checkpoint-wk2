@@ -1,11 +1,13 @@
 // SECTION GLOBAL VARIABLES
 let interrupts = 0;
-let interruptsQueued = 0;
+let interruptsQueued = 9990;
+let interruptsProcessed = 0;
+let interruptCallRate = 0;
 
 const clickUpgrades = [
   { // adds 'right-click' aka the second mouse button as an option - requires upgrades lvl 2
     ID: 'secondMouseBtn',
-    name: 'Second Mouse Btn',
+    name: 'Second Button',
     cost: 16,
     qty: 1, // max of 1
     bonus: 1,
@@ -45,13 +47,15 @@ const clickUpgrades = [
     cost: 256,
     qty: 1, // max of 1
     bonus: 12, // ALL the extra buttons!; does not get modified by level
+    lvl: 1,
+    enabled: false
   },
   {
     ID: 'mouseMovements',
     name: 'Capture Movements',
     cost: 65536,
     qty: 1, // max of 1
-    bonus: 0, // aka false; disabled until purchased
+    bonus: 0, // need to disable mouseDPI until purchased
     lvl: 1,
     enabled: false
   },
@@ -77,12 +81,13 @@ const clickUpgrades = [
 const autoUpgrades = [
   { // an actual mouse in a mouse wheel with a tab that clicks a computer mouse per rotation - levels add tabs to the wheel
     ID: 'mouseWheel',
-    name: 'mouseWheel',
+    name: 'Mouse Wheel',
     cost: 69,
     qty: 1,
     bonus: 1,
     lvl: 1, // decreases interval in steps of 10ms? min 1ms; mouse running faster
-    interval: 1000 // in ms
+    interval: 2000, // in ms
+    enabled: false
   }]
 // !SECTION GLOBAL VARIABLES
 
@@ -101,9 +106,8 @@ const autoUpgrades = [
 function interrupt() {
   let interruptSubtotal = 1;
   clickUpgrades.forEach(upgrade => {
-    let upgradeSubtotal = 1;
     if (upgrade.enabled) {
-      interruptSubtotal += upgradeSubtotal * upgrade.bonus * upgrade.qty * upgrade.lvl
+      interruptSubtotal += upgrade.bonus * upgrade.qty * upgrade.lvl
     }
   })
   interrupts += interruptSubtotal;
@@ -111,8 +115,40 @@ function interrupt() {
   drawALL()
 }
 
-function buyClickUpgrade(upgradeName, cost) {
+function buyClickUpgrade(upgradeID) {
+  clickUpgrades.find(upgrade => {
+    if (upgrade.ID == upgradeID) {
+      if (interruptsQueued >= upgrade.cost && !upgrade.enabled) {
+        interruptsProcessed += upgrade.cost;
+        interruptsQueued -= upgrade.cost
+        upgrade.enabled = true;
+      }
+    }
+  })
+  drawStats()
+}
 
+function buyAutoUpgrade(upgradeID) {
+  autoUpgrades.find(upgrade => {
+    if (upgrade.ID == upgradeID) {
+      if (interruptsQueued >= upgrade.cost && !upgrade.enabled) {
+        interruptsProcessed += upgrade.cost;
+        interruptsQueued -= upgrade.cost
+        upgrade.enabled = true;
+        let bonus = upgrade.bonus * upgrade.qty * upgrade.lvl;
+        setInterval(autoMouseWheel, upgrade.interval, bonus)
+      }
+    }
+  })
+  drawStats()
+}
+
+function autoMouseWheel(bonus) {
+  console.log('initiated auto mouse wheel')
+  interrupts += bonus;
+  interruptsQueued += bonus;
+  document.getElementById('mouseWheel').getAttribute('class')
+  drawStats();
 }
 
 function formatClickUpgradeMenu() {
@@ -122,8 +158,8 @@ function formatClickUpgradeMenu() {
   `;
   clickUpgrades.forEach(upgrade => {
     clickMenuHTML += `
-          <span class="d-flex justify-content-between btn text-white">
-            <p onclick="buyClickUpgrade(${upgrade.ID},${upgrade.cost})">${upgrade.name}: </p>
+          <span class="d-flex justify-content-between align-items-center btn text-white">
+            <p onclick="buyClickUpgrade('${upgrade.ID}')">${upgrade.name}: </p>
             <p>${upgrade.cost}</p>
           </span>
     `
@@ -142,7 +178,7 @@ function formatAutoUpgradeMenu() {
   autoUpgrades.forEach(upgrade => {
     autoMenuHTML += `
           <span class="d-flex justify-content-between btn text-white">
-            <p onclick="buyClickUpgrade(${upgrade.ID},${upgrade.cost})">${upgrade.name}: </p>
+            <p onclick="buyAutoUpgrade('${upgrade.ID}')">${upgrade.name}: </p>
             <p>${upgrade.cost}</p>
           </span>
     `
@@ -153,6 +189,34 @@ function formatAutoUpgradeMenu() {
   document.getElementById('buyMenu').innerHTML += autoMenuHTML
 }
 
+function calcCallRate() {
+  interruptCallRate = 0;
+  calcClickRate()
+  calcAutoRate()
+}
+
+function calcClickRate() {
+  let rate = 1;
+  clickUpgrades.forEach(upgrade => {
+    if (upgrade.enabled == true) {
+      rate += upgrade.bonus * upgrade.qty * upgrade.lvl
+    }
+  });
+  interruptCallRate += rate;
+  document.getElementById('interruptCallRatePerClick').innerHTML = `${rate} |`;
+}
+
+function calcAutoRate() {
+  let rate = 0;
+  autoUpgrades.forEach(upgrade => {
+    if (upgrade.enabled == true) {
+      rate += upgrade.bonus * upgrade.qty * upgrade.lvl
+    }
+  });
+  interruptCallRate += rate;
+  document.getElementById('interruptCallRateAuto').innerHTML = `${rate} |`;
+}
+
 function drawMenus() {
   document.getElementById('buyMenu').innerHTML = ""
   formatClickUpgradeMenu()
@@ -160,17 +224,20 @@ function drawMenus() {
 }
 
 function drawStats() {
-  console.log('boop')
+  calcCallRate()
+  document.getElementById('totalInterruptsSent').innerHTML = `${interrupts} |`;
+  document.getElementById('interruptsQueued').innerHTML = `${interruptsQueued} |`;
+  document.getElementById('interruptsProcessed').innerHTML = `${interruptsProcessed} |`;
+  document.getElementById('grandTotal').innerText = interrupts;
 }
 
-function drawGrandTotal() {
-  document.getElementById('grandTotal').innerText = interrupts;
+function drawUpgrades() {
+
 }
 
 function drawALL() {
   drawStats()
   drawMenus()
-  drawGrandTotal()
 }
 
 // init draw

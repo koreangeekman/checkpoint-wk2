@@ -45,12 +45,25 @@ p {
 .grandTotal {
   width: 670px;
   height: 60px;
+  padding-top: 1rem;
 }
 
 .mouseWheel img {
   height: 200px;
   width: 200px;
   border-radius: 100px;
+}
+
+.mouseDPI {
+  width: 100%;
+}
+
+@media (max-width:1625px) {
+  .grandTotal {
+    padding-top: 0;
+    width: 670px;
+    height: 60px;
+  }
 }
 
 @media (max-width:500px) {

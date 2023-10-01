@@ -90,40 +90,115 @@
             <p class="dashed">------------------------------------------------</p>
           </span>
           <span class="d-flex justify-content-between"> <!-- LINE 1 -->
-            <p class="m-0 p-0">| Interrupts Queued: </p>
-            <p class="m-0 p-0">1234567890 |</p>
+            <p>| Total Interrupts Sent: </p>
+            <p id="totalInterruptsSent">0 |</p>
           </span>
           <p class="dashed"> ------------------------------------------------ </p>
           <span class="d-flex justify-content-between"> <!-- LINE 2 -->
-            <p class="m-0 p-0">| Interrupts Processed: </p>
-            <p class="m-0 p-0">123456 |</p>
+            <p>| Interrupts Queued: </p>
+            <p id="interruptsQueued">0 |</p>
           </span>
           <p class="dashed"> ------------------------------------------------ </p>
           <span class="d-flex justify-content-between"> <!-- LINE 3 -->
-            <p class="m-0 p-0">| Interrupts generated per click: </p>
-            <p class="m-0 p-0">1234567890 |</p>
+            <p>| Interrupts Processed: </p>
+            <p id="interruptsProcessed">0 |</p>
           </span>
           <p class="dashed"> ------------------------------------------------ </p>
-          <p class="m-0 p-0">| 123456789012345678901234567890123456789012345 |</p> <!-- LINE 4 -->
-          <p class="m-0 p-0">| 123456789012345678901234567890123456789012345 |</p> <!-- LINE 5 -->
-          <p class="m-0 p-0">| 123456789012345678901234567890123456789012345 |</p> <!-- LINE 6 -->
-          <p class="m-0 p-0">| 123456789012345678901234567890123456789012345 |</p> <!-- LINE 7 -->
-          <p class="m-0 p-0">| 123456789012345678901234567890123456789012345 |</p> <!-- LINE 8 -->
-          <p class="m-0 p-0">| 123456789012345678901234567890123456789012345 |</p> <!-- LINE 9 -->
-          <p class="m-0 p-0">| 123456789012345678901234567890123456789012345 |</p> <!-- LINE 10 -->
+          <span class="d-flex justify-content-between"> <!-- LINE 4 -->
+            <p>| Interrupts generated per click: </p>
+            <p id="interruptCallRatePerClick">0 |</p>
+          </span>
+          <p class="dashed"> ------------------------------------------------ </p>
+          <span class="d-flex justify-content-between"> <!-- LINE 5 -->
+            <p>| Interrupts automatically generated / sec: </p>
+            <p id="interruptCallRateAuto">0 |</p>
+          </span>
+          <p class="dashed"> ------------------------------------------------ </p>
+          <span class="d-flex justify-content-between"> <!-- LINE 6 -->
+            <p>| UPGRADES: </p>
+            <span class="d-flex" id="additionalMice">
+              <p>+ Addtnl Mice *&nbsp</p>
+              <p id="numberOfMice">0</p> <!-- upgrade lvl -->
+              <p>&nbsp@ •*&nbsp</p>
+              <p id="bonusPerMouse">0</p> <!-- per one-time upgrade -->
+              <p>&nbsp=&nbsp</p>
+              <p id="bonusMiceClickTotal">0</p> <!-- total from all additional mice -->
+            </span>
+            <p>|</p>
+          </span>
+
+          <span class="d-flex justify-content-between"> <!-- LINE 7 -->
+            <span class="d-flex justify-content-start" id="secondMouseBtn">
+              <p>| &nbsp</p>
+              Button 2 • &nbsp
+              <i class="mdi mdi-checkbox-blank-outline"></i>
+              <i class="d-none mdi mdi-checkbox-marked"></i>
+              <p>&nbsp | &nbsp</p>
+            </span>
+
+            <p id="scrollWheel">Scroll Wheel ••• &nbsp
+              <i class="mdi mdi-checkbox-blank-outline"></i>
+              <i class="d-none mdi mdi-checkbox-marked"></i>
+            </p>
+            <p>&nbsp |</p>
+          </span>
+
+          <span class="d-flex justify-content-between"> <!-- LINE 8 -->
+            <span class="d-flex justify-content-start" id="mouseBtn3">
+              <p>| &nbsp</p>
+              Button 3 • &nbsp
+              <i class="mdi mdi-checkbox-blank-outline"></i>
+              <i class="d-none mdi mdi-checkbox-marked"></i>
+              <p>&nbsp | &nbsp</p>
+            </span>
+
+            <span class="d-flex justify-content-start" id="gamerMouse">
+              Gamer Mouse&nbsp ⁝⁝⁝⁝ &nbsp&nbsp
+              <i class="mdi mdi-checkbox-blank-outline"></i>
+              <i class="d-none mdi mdi-checkbox-marked"></i>
+            </span>
+            <p>&nbsp |</p>
+          </span>
+
+          <span class="d-flex justify-content-between"> <!-- LINE 9 -->
+            <span class="d-flex justify-content-start" id="mouseBtn4">
+              <p>| &nbsp</p>
+              Button 4 • &nbsp
+              <i class="mdi mdi-checkbox-blank-outline"></i>
+              <i class="d-none mdi mdi-checkbox-marked"></i>
+              <p>&nbsp |</p>
+            </span>
+
+            <span class="d-flex justify-content-start" id="mouseMovements">
+              Capture Movements &nbsp
+              <i class="mdi mdi-checkbox-blank-outline"></i>
+              <i class="d-none mdi mdi-checkbox-marked"></i>
+              <p>&nbsp&nbsp&nbsp |</p>
+            </span>
+          </span>
+
+          <span class="d-flex justify-content-between"> <!-- LINE 10 -->
+            <p>| &nbsp</p>
+            <span class="d-flex d-none" id="mouseDPI">
+              <p>UNLOCKED: &nbsp</p>
+              <p>Mouse DPI Rate @&nbsp</p>
+              <p id="mouseDPIRate">100</p>
+            </span>
+            <p class="justify-self-end">&nbsp|</p>
+          </span>
           <p class="dashed"> ------------------------------------------------ </p>
         </div>
       </div>
       <!-- !SECTION STATS PAGE -->
 
       <!-- SECTION MOUSE IMG -->
-      <div class="col-12 col-md-2 order-1 order-md-3">
+      <div class="col-12 col-md-2 order-1 order-md-3 d-flex align-items-end">
         <img class="m-0 p-0 " onclick="interrupt()" src="./imgs/mouse.png" alt="vintage computer mouse">
       </div>
       <!-- !SECTION MOUSE IMG -->
 
       <!-- SECTION EVEN MOAR STATS -->
-      <div class="col-12 pt-3 d-flex grandTotal order-4">
+      <div class="col-12 d-flex grandTotal order-4">
         <span class="blueBG d-flex w-100 p-2 rounded justify-content-between">
           <p class="px-3">Total Interrupts Sent: </p>
           <p class="px-3" id="grandTotal">0</p>
