@@ -9,10 +9,11 @@ p {
   margin: 0;
 }
 
-.BGimg {
+.imgBG {
   background-image: url(./imgs/mainBG.jpg);
   background-position: top;
-  object-fit: scale-down;
+  background-repeat: no-repeat;
+  /* object-fit: scale-down; */
 }
 
 .blueBG {
@@ -42,28 +43,27 @@ p {
   text-align: center;
 }
 
-.grandTotal {
-  width: 670px;
-  height: 60px;
-  padding-top: 1rem;
+#mouseWheel {
+  height: 200px;
+  width: 232px;
 }
 
-.mouseWheel img {
+#mouseWheel img {
   height: 200px;
   width: 200px;
   border-radius: 100px;
+  z-index: 0;
+  /* position: relative; */
+  /* top: -32px; */
+}
+
+#mouseWheel p {
+  z-index: 1;
+  color: white;
 }
 
 .mouseDPI {
   width: 100%;
-}
-
-@media (max-width:1625px) {
-  .grandTotal {
-    padding-top: 0;
-    width: 670px;
-    height: 60px;
-  }
 }
 
 @media (max-width:500px) {

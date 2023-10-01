@@ -26,15 +26,15 @@
   provided example: moon made of cheese, collecting cheese as a resource
   other example: collecting cat hairs; collecting cat purrs
   
-  -- my custom theme?... : puzzle pieces? solving puzzles to advance, every piece provides 'experience'
+  -- my custom theme?... : puzzle pieces? solving puzzles to advance, every piece provides 'memories' (XP)
   start with just clicking the image of a static puzzle board to get the logic in play
   add 2D hide/show function to reveal parts of the image - bonus: randomize images
   
   starts with single player... evolve to a multiplayer post graduation?
   jigsaw puzzle.. gettin' jigsy with it
-  can include crosswords?sudoku?wordsearch? like games
+  can evolve to include crosswords?sudoku?wordsearch? like games
 
-  need to start simple with just checkpoint requirements first.. but final build will be too different.. consider as a personal project
+  need to start simple with just checkpoint requirements first.. but final build will be too different.. consider as a potential personal project
 
 
   -- alternate theme for the sake of just the checkpoint?
@@ -57,7 +57,7 @@
   ---ultra upgrade to include mouse movements
 
 
-  -- convert to keyboard apm tracker? or another alternative theme?
+  -- add/convert to keyboard apm tracker? or just as an alternative theme?
   include any and all keystrokes as a conditional
 
   long-term bonus: animate the key pressed on the virtual image as well - even so far as LED effects??
@@ -66,7 +66,7 @@
 
 </head>
 
-<body class="BGimg debug">
+<body class="imgBG debug">
   <main class="container-fluid">
     <div class="row justify-content-around">
 
@@ -82,24 +82,27 @@
       <!-- !SECTION SHOP MENU -->
 
       <!-- SECTION STATS PAGE -->
-      <div class="col-12 col-md-6 screen mb-4 order-2 order-md-2">
+      <div class="col-12 col-md-6 screen mb-4 order-1 order-md-2">
         <div class="rounded bg-dark text-light justify-content-center px-2">
           <span class="text-center m-0 p-0">
             <p class="m-0 p-0">------------------------------------------------</p>
             <p class="bg-dark text-light title">IRQ OVERLOArD</p>
             <p class="dashed">------------------------------------------------</p>
           </span>
-          <span class="d-flex justify-content-between"> <!-- LINE 1 -->
+          <span class="d-flex justify-content-between text-secondary"> <!-- LINE 1 -->
             <p>| Total Interrupts Sent: </p>
             <p id="totalInterruptsSent">0 |</p>
           </span>
           <p class="dashed"> ------------------------------------------------ </p>
           <span class="d-flex justify-content-between"> <!-- LINE 2 -->
             <p>| Interrupts Queued: </p>
+            <i class="mdi mdi-current-dc"></i>
+            $
+            <i class="mdi mdi-current-dc"></i>
             <p id="interruptsQueued">0 |</p>
           </span>
           <p class="dashed"> ------------------------------------------------ </p>
-          <span class="d-flex justify-content-between"> <!-- LINE 3 -->
+          <span class="d-flex justify-content-between text-secondary"> <!-- LINE 3 -->
             <p>| Interrupts Processed: </p>
             <p id="interruptsProcessed">0 |</p>
           </span>
@@ -181,7 +184,8 @@
             <p>| &nbsp</p>
             <span class="d-flex d-none" id="mouseDPI">
               <p>UNLOCKED: &nbsp</p>
-              <p>Mouse DPI Rate @&nbsp</p>
+              <p>Mouse DPI Rate L </p>
+              <p id="mouseDPIlvl">1 @&nbsp</p>
               <p id="mouseDPIRate">100</p>
             </span>
             <p class="justify-self-end">&nbsp|</p>
@@ -192,22 +196,23 @@
       <!-- !SECTION STATS PAGE -->
 
       <!-- SECTION MOUSE IMG -->
-      <div class="col-12 col-md-2 order-1 order-md-3 d-flex align-items-end">
+      <div class="col-12 col-md-2 order-2 order-md-3 d-flex align-items-end">
         <img class="m-0 p-0 " onclick="interrupt()" src="./imgs/mouse.png" alt="vintage computer mouse">
       </div>
       <!-- !SECTION MOUSE IMG -->
 
-      <!-- SECTION EVEN MOAR STATS -->
-      <div class="col-12 d-flex grandTotal order-4">
-        <span class="blueBG d-flex w-100 p-2 rounded justify-content-between">
-          <p class="px-3">Total Interrupts Sent: </p>
-          <p class="px-3" id="grandTotal">0</p>
-        </span>
-      </div>
-      <!-- !SECTION EVEN MOAR STATS -->
-      <div class="col-12 p-3 mouseWheel order-5">
-        <img class="img-fluid d-none" id="mouseWheel" src="https://i.giphy.com/media/APaikN0tFL86BDUDgq/giphy.webp"
-          alt="animated mouse in a wheel">
+      <div class="col-6 p-3 order-5 d-flex justify-content-center">
+        <div class="h-100 blueBG rounded p-3 d-none" id="mouseWheel">
+          <div class="d-flex justify-content-between">
+            <p id="mouseWheelLVL">L1</p>
+            <p id="mouseWheelQTY">x1</p>
+          </div>
+          <img class="img-fluid" src="https://i.giphy.com/media/APaikN0tFL86BDUDgq/giphy.webp"
+            alt="animated mouse in a wheel">
+          <!-- <div class="d-flex justify-content-center">
+            <p id="mouseWheelRate">Auto @ 2</p>
+          </div> -->
+        </div>
       </div>
     </div>
   </main>

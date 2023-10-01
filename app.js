@@ -1,6 +1,6 @@
 // SECTION GLOBAL VARIABLES
 let interrupts = 0;
-let interruptsQueued = 99999;
+let interruptsQueued = 822880;
 let interruptsProcessed = 0;
 let interruptCallRate = 0;
 
@@ -51,15 +51,6 @@ const clickUpgrades = [
     enabled: false
   },
   {
-    ID: 'mouseMovements',
-    name: 'Capture Movements',
-    cost: 65536,
-    qty: 1, // max of 1
-    bonus: 0, // need to disable mouseDPI until purchased
-    lvl: 1,
-    enabled: false
-  },
-  {
     ID: 'mouseDPI',
     name: 'Increase DPI',
     cost: 8192,
@@ -69,10 +60,19 @@ const clickUpgrades = [
     enabled: false
   },
   {
+    ID: 'mouseMovements',
+    name: 'Capture Movements',
+    cost: 65536,
+    qty: 1, // max of 1
+    bonus: 0, // mouseDPI disabled until purchased
+    lvl: 1,
+    enabled: false
+  },
+  {
     ID: 'additionalMice',
     name: 'Add a mouse',
     cost: 4096,
-    qty: 1, // max of 127
+    qty: 0, // max of 127
     bonus: 1, // default:1, max 127; as a multiplier, duplicates the potential per mouse added! - primary continual upgrade
     lvl: 1,
     enabled: false
@@ -84,7 +84,7 @@ const autoUpgrades = [
     name: 'Mouse Wheel',
     cost: 69,
     qty: 1,
-    bonus: 1, // dependent on original mouse upgrades
+    bonus: 2, // dependent on original mouse upgrades
     lvl: 1, // decreases interval in steps of 10ms? min 1ms; mouse running faster
     interval: 2000, // in ms
     enabled: false
@@ -117,6 +117,7 @@ function interrupt() {
 
 function buyClickUpgrade(upgradeID) {
   clickUpgrades.find(upgrade => {
+
     if (upgrade.ID == upgradeID) {
       if (interruptsQueued >= upgrade.cost && !upgrade.enabled) {
         interruptsProcessed += upgrade.cost;
@@ -124,22 +125,29 @@ function buyClickUpgrade(upgradeID) {
         upgrade.enabled = true;
 
         if (upgradeID != 'mouseDPI' && upgradeID != 'additionalMice') {
-          markCheckbox(upgradeID)
+          markCheckbox(upgradeID);
         }
 
         if (upgradeID == 'mouseMovements') {
-          document.getElementById('mouseDPI').classList.remove('d-none')
+          document.getElementById('mouseDPI').classList.remove('d-none');
           clickUpgrades.find(dpi => dpi.ID == 'mouseDPI' ? dpi.enabled = true : console.log('dpiFIND'))
           // a better way to do this? accessing another object from the same list via find while it's already parsing through it instead of initiating another
-          drawMenus()
         }
-
-
       }
     }
-    if (upgrade.ID == upgradeID && upgradeID != mouseDPI && upgradeID != additionalMice && upgrade.enabled) {
-      // document.getElementById('clickMenu').querySelector()
+
+    if (upgrade.ID == upgradeID && upgrade.ID == 'mouseDPI' && upgrade.enabled) {
+      spendInterrupts(upgrade.cost);
+      upgrade.cost *= 2;
+      upgrade.bonus *= 2;
     }
+
+    if (upgrade.ID == upgradeID && upgrade.ID == 'additionalMice' && upgrade.enabled) {
+      spendInterrupts(upgrade.cost);
+      upgrade.cost *= 2;
+      upgrade.qty++
+    }
+
   })
   drawALL()
 }
@@ -150,7 +158,7 @@ function markCheckbox(upgradeID) {
   upgradeDOM.querySelectorAll('i')[1].classList.remove('d-none')
 }
 
-function unmarkCheckboxes(upgradeID) { // to be part of the game reset
+function unmarkCheckboxes(upgradeID) { // to be part of a game reset
   const upgradeDOM = document.getElementById(upgradeID)
   upgradeDOM.querySelector('i').classList.remove('d-none')
   upgradeDOM.querySelectorAll('i')[1].classList.add('d-none')
@@ -159,24 +167,36 @@ function unmarkCheckboxes(upgradeID) { // to be part of the game reset
 function buyAutoUpgrade(upgradeID) {
   autoUpgrades.find(upgrade => {
     if (upgrade.ID == upgradeID) {
-      if (interruptsQueued >= upgrade.cost && !upgrade.enabled) {
-        interruptsProcessed += upgrade.cost;
-        interruptsQueued -= upgrade.cost
-        upgrade.enabled = true;
+      if (interruptsQueued >= upgrade.cost && upgrade.enabled) {
+        spendInterrupts(upgrade.cost)
+        upgrade.qty++
+        // upgrade.bonus *= 2; // when lvl is adjusted
+        if (upgrade.qty == 2) {
+          upgrade.cost = 1024;
+        } else {
+          upgrade.cost *= 2;
+        }
         let bonus = upgrade.bonus * upgrade.qty * upgrade.lvl;
         setInterval(autoMouseWheel, upgrade.interval, bonus)
       }
+      if (interruptsQueued >= upgrade.cost && !upgrade.enabled) {
+        spendInterrupts(upgrade.cost)
+        upgrade.enabled = true;
+        upgrade.cost = 420;
+        let bonus = upgrade.bonus * upgrade.qty * upgrade.lvl;
+        autoMouseWheel(bonus)
+        setInterval(autoMouseWheel, upgrade.interval, bonus)
+        document.getElementById('mouseWheel').classList.remove('d-none')
+      }
     }
   })
-  drawStats()
+  drawALL()
 }
 
 function autoMouseWheel(bonus) {
   console.log('initiated auto mouse wheel')
-  interrupts += bonus;
-  interruptsQueued += bonus;
-  document.getElementById('mouseWheel').getAttribute('class')
-  drawStats();
+  addInterrupts(bonus)
+  drawALL();
 }
 
 function formatClickUpgradeMenu() {
@@ -219,15 +239,16 @@ function formatAutoUpgradeMenu() {
 
 function calcCallRate() {
   interruptCallRate = 0;
-  calcClickRate()
-  calcAutoRate()
+  calcClickRate();
+  calcAutoRate();
+  addMouse();
 }
 
 function calcClickRate() {
   let rate = 1;
   clickUpgrades.forEach(upgrade => {
     if (upgrade.enabled == true) {
-      rate += upgrade.bonus * upgrade.qty * upgrade.lvl
+      rate += upgrade.bonus * upgrade.qty * upgrade.lvl;
     }
   });
   interruptCallRate += rate;
@@ -238,7 +259,7 @@ function calcAutoRate() {
   let rate = 0;
   autoUpgrades.forEach(upgrade => {
     if (upgrade.enabled == true) {
-      rate += upgrade.bonus * upgrade.qty * upgrade.lvl
+      rate += upgrade.bonus * upgrade.qty * upgrade.lvl;
     }
   });
   interruptCallRate += rate;
@@ -246,7 +267,21 @@ function calcAutoRate() {
 }
 
 function addMouse() {
+  let mouseBonus = 1;
+  clickUpgrades.forEach(upgrade => {
+    upgrade.enabled && upgrade.ID != 'additionalMice' && upgrade.ID != 'mouseMovements' ? mouseBonus += upgrade.bonus * upgrade.qty * upgrade.lvl : null;
+  })
+  clickUpgrades.find(upgrade => upgrade.ID == 'additionalMice' ? upgrade.bonus = mouseBonus : null)
+}
 
+function addInterrupts(cost) { // adding to global vars for both counters
+  interrupts += cost; // GRAND TOTAL of interrupts sent
+  interruptsQueued += cost; // currently available interrupts to spend
+}
+
+function spendInterrupts(cost) { // removes from available currency and adds to spent amount
+  interruptsProcessed += cost;
+  interruptsQueued -= cost
 }
 
 function drawMenus() {
@@ -260,27 +295,33 @@ function drawStats() {
   document.getElementById('totalInterruptsSent').innerHTML = `${interrupts} |`;
   document.getElementById('interruptsQueued').innerHTML = `${interruptsQueued} |`;
   document.getElementById('interruptsProcessed').innerHTML = `${interruptsProcessed} |`;
-  document.getElementById('grandTotal').innerText = interrupts;
 }
 
 function drawUpgrades() {
   const addedMice = document.getElementById('additionalMice').innerText;
   clickUpgrades.find(upgrade => {
-    if (upgrade.ID == additionalMice) {
-
+    if (upgrade.ID == 'additionalMice') {
       document.getElementById('numberOfMice').innerText = upgrade.qty;
       document.getElementById('bonusPerMouse').innerText = upgrade.bonus;
-      document.getElementById('bonusMiceClickTotal').innerText = upgrade.qty;
+      document.getElementById('bonusMiceClickTotal').innerText = upgrade.qty * upgrade.bonus;
     }
-
+    if (upgrade.ID == 'mouseDPI') {
+      document.getElementById('mouseDPIRate').innerText = upgrade.bonus;
+    }
   })
-
-
+  autoUpgrades.find(upgrade => {
+    if (upgrade.ID = 'mouseWheel') {
+      document.getElementById('mouseWheelLVL').innerText = `L${upgrade.lvl}`;
+      document.getElementById('mouseWheelQTY').innerText = `x${upgrade.qty}`;
+      // document.getElementById('mouseWheelRate').innerText = `Rate @ ${upgrade.bonus}`;
+    }
+  })
 }
 
 function drawALL() {
-  drawStats()
-  drawMenus()
+  drawMenus();
+  drawStats();
+  drawUpgrades();
 }
 
 // init draw
