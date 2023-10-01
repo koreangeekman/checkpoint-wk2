@@ -1,6 +1,6 @@
 // SECTION GLOBAL VARIABLES
 let interrupts = 0;
-let interruptsQueued = 9990;
+let interruptsQueued = 99999;
 let interruptsProcessed = 0;
 let interruptCallRate = 0;
 
@@ -84,7 +84,7 @@ const autoUpgrades = [
     name: 'Mouse Wheel',
     cost: 69,
     qty: 1,
-    bonus: 1,
+    bonus: 1, // dependent on original mouse upgrades
     lvl: 1, // decreases interval in steps of 10ms? min 1ms; mouse running faster
     interval: 2000, // in ms
     enabled: false
@@ -122,10 +122,38 @@ function buyClickUpgrade(upgradeID) {
         interruptsProcessed += upgrade.cost;
         interruptsQueued -= upgrade.cost
         upgrade.enabled = true;
+
+        if (upgradeID != 'mouseDPI' && upgradeID != 'additionalMice') {
+          markCheckbox(upgradeID)
+        }
+
+        if (upgradeID == 'mouseMovements') {
+          document.getElementById('mouseDPI').classList.remove('d-none')
+          clickUpgrades.find(dpi => dpi.ID == 'mouseDPI' ? dpi.enabled = true : console.log('dpiFIND'))
+          // a better way to do this? accessing another object from the same list via find while it's already parsing through it instead of initiating another
+          drawMenus()
+        }
+
+
       }
     }
+    if (upgrade.ID == upgradeID && upgradeID != mouseDPI && upgradeID != additionalMice && upgrade.enabled) {
+      // document.getElementById('clickMenu').querySelector()
+    }
   })
-  drawStats()
+  drawALL()
+}
+
+function markCheckbox(upgradeID) {
+  const upgradeDOM = document.getElementById(upgradeID)
+  upgradeDOM.querySelector('i').classList.add('d-none')
+  upgradeDOM.querySelectorAll('i')[1].classList.remove('d-none')
+}
+
+function unmarkCheckboxes(upgradeID) { // to be part of the game reset
+  const upgradeDOM = document.getElementById(upgradeID)
+  upgradeDOM.querySelector('i').classList.remove('d-none')
+  upgradeDOM.querySelectorAll('i')[1].classList.add('d-none')
 }
 
 function buyAutoUpgrade(upgradeID) {
@@ -153,12 +181,12 @@ function autoMouseWheel(bonus) {
 
 function formatClickUpgradeMenu() {
   let clickMenuHTML = `
-      <div class="blueBG rounded p-1">
+      <div class="blueBG rounded p-1" id="clickMenu">
         <p class="fs-5 text-center">Click Upgrades</p>
   `;
   clickUpgrades.forEach(upgrade => {
     clickMenuHTML += `
-          <span class="d-flex justify-content-between align-items-center btn text-white">
+          <span class="d-flex justify-content-between align-items-center btn text-white ${!upgrade.enabled && upgrade.ID == 'mouseDPI' ? 'd-none' : ''} ${interruptsQueued <= upgrade.cost ? 'disabled' : ''} ${upgrade.enabled && upgrade.ID != 'mouseDPI' && upgrade.ID != 'additionalMice' ? 'd-none' : ''}">
             <p onclick="buyClickUpgrade('${upgrade.ID}')">${upgrade.name}: </p>
             <p>${upgrade.cost}</p>
           </span>
@@ -172,12 +200,12 @@ function formatClickUpgradeMenu() {
 
 function formatAutoUpgradeMenu() {
   let autoMenuHTML = `
-      <div class="blueBG rounded p-1 mt-3">
+      <div class="blueBG rounded p-1 mt-3" id="autoMenu">
         <p class="fs-5 text-center">Auto Upgrades</p>
   `;
   autoUpgrades.forEach(upgrade => {
     autoMenuHTML += `
-          <span class="d-flex justify-content-between btn text-white">
+          <span class="d-flex justify-content-between btn text-white ${interruptsQueued >= upgrade.cost ? 'enabled' : 'disabled'}">
             <p onclick="buyAutoUpgrade('${upgrade.ID}')">${upgrade.name}: </p>
             <p>${upgrade.cost}</p>
           </span>
@@ -217,6 +245,10 @@ function calcAutoRate() {
   document.getElementById('interruptCallRateAuto').innerHTML = `${rate} |`;
 }
 
+function addMouse() {
+
+}
+
 function drawMenus() {
   document.getElementById('buyMenu').innerHTML = ""
   formatClickUpgradeMenu()
@@ -232,6 +264,17 @@ function drawStats() {
 }
 
 function drawUpgrades() {
+  const addedMice = document.getElementById('additionalMice').innerText;
+  clickUpgrades.find(upgrade => {
+    if (upgrade.ID == additionalMice) {
+
+      document.getElementById('numberOfMice').innerText = upgrade.qty;
+      document.getElementById('bonusPerMouse').innerText = upgrade.bonus;
+      document.getElementById('bonusMiceClickTotal').innerText = upgrade.qty;
+    }
+
+  })
+
 
 }
 
