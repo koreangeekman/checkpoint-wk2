@@ -110,8 +110,7 @@ function interrupt() {
       interruptSubtotal += upgrade.bonus * upgrade.qty * upgrade.lvl
     }
   })
-  interrupts += interruptSubtotal;
-  interruptsQueued += interruptSubtotal;
+  addInterrupts(interruptSubtotal);
   drawALL()
 }
 
@@ -206,8 +205,8 @@ function formatClickUpgradeMenu() {
   `;
   clickUpgrades.forEach(upgrade => {
     clickMenuHTML += `
-          <span class="d-flex justify-content-between align-items-center btn text-white ${!upgrade.enabled && upgrade.ID == 'mouseDPI' ? 'd-none' : ''} ${interruptsQueued <= upgrade.cost ? 'disabled' : ''} ${upgrade.enabled && upgrade.ID != 'mouseDPI' && upgrade.ID != 'additionalMice' ? 'd-none' : ''}">
-            <p onclick="buyClickUpgrade('${upgrade.ID}')">${upgrade.name}: </p>
+          <span onclick="buyClickUpgrade('${upgrade.ID}')" class="d-flex justify-content-between align-items-center btn text-white ${!upgrade.enabled && upgrade.ID == 'mouseDPI' ? 'd-none' : ''} ${interruptsQueued < upgrade.cost ? 'disabled' : ''} ${upgrade.enabled && upgrade.ID != 'mouseDPI' && upgrade.ID != 'additionalMice' ? 'd-none' : ''}">
+            <p>${upgrade.name}: </p>
             <p>${upgrade.cost}</p>
           </span>
     `
@@ -225,8 +224,8 @@ function formatAutoUpgradeMenu() {
   `;
   autoUpgrades.forEach(upgrade => {
     autoMenuHTML += `
-          <span class="d-flex justify-content-between btn text-white ${interruptsQueued >= upgrade.cost ? 'enabled' : 'disabled'}">
-            <p onclick="buyAutoUpgrade('${upgrade.ID}')">${upgrade.name}: </p>
+          <span onclick="buyAutoUpgrade('${upgrade.ID}')" class="d-flex justify-content-between btn text-white ${interruptsQueued >= upgrade.cost ? 'enabled' : 'disabled'}">
+            <p>${upgrade.name}: </p>
             <p>${upgrade.cost}</p>
           </span>
     `
