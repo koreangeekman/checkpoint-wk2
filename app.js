@@ -55,7 +55,7 @@ const clickUpgrades = [
     name: 'Increase DPI',
     cost: 8192,
     qty: 1, // max of 1
-    bonus: 100, // default: 100, max: 32,000?; dependent on mouseMovements being TRUE; DPI doubles per level - secondary continual upgrade
+    bonus: 100, // default: 100, max: 32,000?; dependent on mouseMovements being TRUE; DPI doubles per level - primary continual super upgrade
     lvl: 1,
     enabled: false
   },
@@ -71,7 +71,7 @@ const clickUpgrades = [
   {
     ID: 'additionalMice',
     name: 'Add a mouse',
-    cost: 4096,
+    cost: 1024,
     qty: 0, // max of 127
     bonus: 1, // default:1, max 127; as a multiplier, duplicates the potential per mouse added! - primary continual upgrade
     lvl: 1,
@@ -131,12 +131,16 @@ function buyClickUpgrade(upgradeID) {
 
     if (upgrade.ID == upgradeID) {
       if (interruptsQueued >= upgrade.cost && !upgrade.enabled) {
-        interruptsProcessed += upgrade.cost;
-        interruptsQueued -= upgrade.cost
+        spendInterrupts(upgrade.cost);
         upgrade.enabled = true;
 
         if (upgradeID != 'mouseDPI' && upgradeID != 'additionalMice') {
           markCheckbox(upgradeID);
+        }
+
+        if (upgradeID == 'additionalMice') {
+          upgrade.cost *= 2;
+          upgrade.qty++
         }
 
         if (upgradeID == 'mouseMovements') {
