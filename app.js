@@ -1,6 +1,6 @@
 // SECTION GLOBAL VARIABLES
 let interrupts = 0;
-let interruptsQueued = 822880;
+let interruptsQueued = 0;
 let interruptsProcessed = 0;
 let interruptCallRate = 0;
 
