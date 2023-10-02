@@ -117,6 +117,18 @@ function interrupt() {
 function buyClickUpgrade(upgradeID) {
   clickUpgrades.find(upgrade => {
 
+    if (upgrade.ID == upgradeID && upgrade.ID == 'mouseDPI' && upgrade.enabled) {
+      spendInterrupts(upgrade.cost);
+      upgrade.cost *= 2;
+      upgrade.bonus *= 2;
+    }
+
+    if (upgrade.ID == upgradeID && upgrade.ID == 'additionalMice' && upgrade.enabled) {
+      spendInterrupts(upgrade.cost);
+      upgrade.cost *= 2;
+      upgrade.qty++
+    }
+
     if (upgrade.ID == upgradeID) {
       if (interruptsQueued >= upgrade.cost && !upgrade.enabled) {
         interruptsProcessed += upgrade.cost;
@@ -133,18 +145,6 @@ function buyClickUpgrade(upgradeID) {
           // a better way to do this? accessing another object from the same list via find while it's already parsing through it instead of initiating another
         }
       }
-    }
-
-    if (upgrade.ID == upgradeID && upgrade.ID == 'mouseDPI' && upgrade.enabled) {
-      spendInterrupts(upgrade.cost);
-      upgrade.cost *= 2;
-      upgrade.bonus *= 2;
-    }
-
-    if (upgrade.ID == upgradeID && upgrade.ID == 'additionalMice' && upgrade.enabled) {
-      spendInterrupts(upgrade.cost);
-      upgrade.cost *= 2;
-      upgrade.qty++
     }
 
   })
